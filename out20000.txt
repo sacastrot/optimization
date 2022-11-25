@@ -1,0 +1,193 @@
+
+TKPROF: Release 11.2.0.2.0 - Development on Thu Nov 24 19:16:39 2022
+
+Copyright (c) 1982, 2009, Oracle and/or its affiliates.  All rights reserved.
+
+Trace file: C:\oraclexe\app\oracle\diag\rdbms\xe\xe\trace\xe_ora_18420.trc
+Sort options: default
+
+********************************************************************************
+count    = number of times OCI procedure was executed
+cpu      = cpu time in seconds executing 
+elapsed  = elapsed time in seconds executing
+disk     = number of physical reads of buffers from disk
+query    = number of buffers gotten for consistent read
+current  = number of buffers gotten in current mode (usually for update)
+rows     = number of rows processed by the fetch or execute call
+********************************************************************************
+
+SQL ID: 1a2g3z4rj1uq2 Plan Hash: 0
+
+alter session set sql_trace true
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        0      0.00       0.00          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        0      0.00       0.00          0          0          0           0
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        1      0.00       0.00          0          0          0           0
+
+Misses in library cache during parse: 0
+Misses in library cache during execute: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 48  
+********************************************************************************
+
+SQL ID: 7nvx9fahs59ys Plan Hash: 2442647542
+
+SELECT * 
+FROM
+ FACTURA f, DETALLE d WHERE f.CODIGOF = d.CODFACT
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch     1335      0.00       0.03          0      22845          0       20000
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total     1337      0.00       0.03          0      22845          0       20000
+
+Misses in library cache during parse: 0
+Optimizer mode: ALL_ROWS
+Parsing user id: 48  
+Number of plan statistics captured: 1
+
+Rows (1st) Rows (avg) Rows (max)  Row Source Operation
+---------- ---------- ----------  ---------------------------------------------------
+     20000      20000      20000  NESTED LOOPS  (cr=22845 pr=0 pw=0 time=34430 us)
+     20000      20000      20000   NESTED LOOPS  (cr=2845 pr=0 pw=0 time=22355 us cost=3 size=76 card=1)
+     20000      20000      20000    TABLE ACCESS FULL DETALLE (cr=1396 pr=0 pw=0 time=8586 us cost=2 size=65 card=1)
+     20000      20000      20000    INDEX UNIQUE SCAN SYS_C007039 (cr=1449 pr=0 pw=0 time=8145 us cost=1 size=0 card=1)(object id 20347)
+     20000      20000      20000   TABLE ACCESS BY INDEX ROWID FACTURA (cr=20000 pr=0 pw=0 time=8011 us cost=1 size=11 card=1)
+
+********************************************************************************
+
+SELECT value AS ruta_d
+FROM v$parameter
+WHERE name = 'user_dump_dest'
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        2      0.00       0.00          0          0          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.00       0.00          0          0          0           1
+
+Misses in library cache during parse: 0
+Optimizer mode: ALL_ROWS
+Parsing user id: 48  
+Number of plan statistics captured: 1
+
+Rows (1st) Rows (avg) Rows (max)  Row Source Operation
+---------- ---------- ----------  ---------------------------------------------------
+         1          1          1  HASH JOIN  (cr=0 pr=0 pw=0 time=1180 us cost=1 size=2115 card=1)
+         1          1          1   FIXED TABLE FULL X$KSPPI (cr=0 pr=0 pw=0 time=616 us cost=0 size=81 card=1)
+      2649       2649       2649   FIXED TABLE FULL X$KSPPCV (cr=0 pr=0 pw=0 time=633 us cost=0 size=203400 card=100)
+
+********************************************************************************
+
+SQL ID: grwydz59pu6mc Plan Hash: 3684871272
+
+select text 
+from
+ view$ where rowid=:1
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        2      0.00       0.00          0          0          0           0
+Execute      2      0.00       0.00          0          0          0           0
+Fetch        2      0.00       0.00          0          4          0           2
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        6      0.00       0.00          0          4          0           2
+
+Misses in library cache during parse: 0
+Optimizer mode: CHOOSE
+Parsing user id: SYS   (recursive depth: 1)
+Number of plan statistics captured: 1
+
+Rows (1st) Rows (avg) Rows (max)  Row Source Operation
+---------- ---------- ----------  ---------------------------------------------------
+         1          1          1  TABLE ACCESS BY USER ROWID VIEW$ (cr=1 pr=0 pw=0 time=22 us cost=1 size=15 card=1)
+
+********************************************************************************
+
+SELECT spid FROM sys.v_$process
+WHERE addr = (SELECT paddr FROM sys.v_$session
+              WHERE audsid = USERENV('sessionid')
+             )
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        2      0.00       0.00          0          0          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.00       0.00          0          0          0           1
+
+Misses in library cache during parse: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 48  
+Number of plan statistics captured: 1
+
+Rows (1st) Rows (avg) Rows (max)  Row Source Operation
+---------- ---------- ----------  ---------------------------------------------------
+         1          1          1  FIXED TABLE FULL X$KSUPR (cr=0 pr=0 pw=0 time=83 us cost=0 size=46 card=1)
+         1          1          1   NESTED LOOPS  (cr=0 pr=0 pw=0 time=67 us cost=0 size=110 card=1)
+         1          1          1    NESTED LOOPS  (cr=0 pr=0 pw=0 time=66 us cost=0 size=97 card=1)
+         1          1          1     FIXED TABLE FULL X$KSUSE (cr=0 pr=0 pw=0 time=62 us cost=0 size=71 card=1)
+         1          1          1     FIXED TABLE FIXED INDEX X$KSLWT (ind:1) (cr=0 pr=0 pw=0 time=3 us cost=0 size=26 card=1)
+         1          1          1    FIXED TABLE FIXED INDEX X$KSLED (ind:2) (cr=0 pr=0 pw=0 time=1 us cost=0 size=13 card=1)
+
+
+
+
+********************************************************************************
+
+OVERALL TOTALS FOR ALL NON-RECURSIVE STATEMENTS
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        3      0.00       0.00          0          0          0           0
+Execute      4      0.00       0.00          0          0          0           0
+Fetch     1339      0.00       0.03          0      22845          0       20002
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total     1346      0.00       0.03          0      22845          0       20002
+
+Misses in library cache during parse: 1
+Misses in library cache during execute: 1
+
+
+OVERALL TOTALS FOR ALL RECURSIVE STATEMENTS
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        2      0.00       0.00          0          0          0           0
+Execute      2      0.00       0.00          0          0          0           0
+Fetch        2      0.00       0.00          0          4          0           2
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        6      0.00       0.00          0          4          0           2
+
+Misses in library cache during parse: 0
+
+    4  user  SQL statements in session.
+    1  internal SQL statements in session.
+    5  SQL statements in session.
+********************************************************************************
+Trace file: C:\oraclexe\app\oracle\diag\rdbms\xe\xe\trace\xe_ora_18420.trc
+Trace file compatibility: 11.1.0.7
+Sort options: default
+
+       1  session in tracefile.
+       4  user  SQL statements in trace file.
+       1  internal SQL statements in trace file.
+       5  SQL statements in trace file.
+       5  unique SQL statements in trace file.
+    1436  lines in trace file.
+      40  elapsed seconds in trace file.
+
+

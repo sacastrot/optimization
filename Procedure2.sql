@@ -1,29 +1,31 @@
 -- TODO: Tiene errores la logica, no funciona
 create or replace procedure filldetalle(nRows IN number) is
     type number_type is table of number(20) index by binary_integer;
-    codigof number_type;
 
-    codigod number_type;
-    codproducto     number_type;
-    nro_unidades    number_type;
-    valor_unitario  number_type;
-    codfact         number_type;
-    cont number(20) := 0;
+    codFromFact number_type;
+    codD        number_type;
+    codProd     number_type;
+    nroUnits    number_type;
+    uniValue    number_type;
+    codFact     number_type;
+--     Limite inferior
+    li number(20) := 0;
 begin
-    select CODIGOF bulk collect into codigof from FACTURA order by CODIGOF;
+    delete DETALLE;
+    select CODIGOF bulk collect into codFromFact from FACTURA order by CODIGOF;
 
-    for i in 0..codigof.LAST loop
+    for i in codFromFact.FIRST..codFromFact.LAST loop
         for j in 1..nRows loop
-            codigod(i+j) := i+j;
-            codproducto(i) := ceil(DBMS_RANDOM.VALUE(2000,10000));
-            nro_unidades(i) := ceil(DBMS_RANDOM.VALUE(10,1000));
-            valor_unitario(i) := ceil(DBMS_RANDOM.VALUE(800,999999));
-            codfact(i+j) := codigof(i);
-            cont := i+j;
+            codD(li) := li;
+            codProd(li) := ceil(DBMS_RANDOM.VALUE(2000,10000));
+            nroUnits(li) := ceil(DBMS_RANDOM.VALUE(10,1000));
+            uniValue(li) := ceil(DBMS_RANDOM.VALUE(800,999999));
+            codFact(li) := codFromFact(i);
+            li := li + 1;
         end loop;
+
     end loop;
-
-    forall k in 1..cont
-        insert into DETALLE values (CODIGOD(k),CODPRODUCTO(k),NRO_UNIDADES(k),VALOR_UNITARIO(k),CODFACT(k));
-
+    forall k in 0..(li-1)
+        insert into DETALLE values (codD(k),codProd(k),nroUnits(k),uniValue(k),codFact(k));
+    commit;
 end;

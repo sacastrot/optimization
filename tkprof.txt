@@ -1,0 +1,19 @@
+alter session set sql_trace true;
+-- Ver ruta de user_dump
+SELECT value AS ruta_d
+FROM v$parameter
+WHERE name = 'user_dump_dest’;
+-- Ver id del proceso
+SELECT spid FROM sys.v_$process
+WHERE addr = (SELECT paddr FROM sys.v_$session
+              WHERE audsid = USERENV('sessionid')
+             );
+// uso de tkprof
+tkprof C:\oraclexe\app\oracle\diag\rdbms\xe\xe\trace\xe_ora_3424.trc C:\temp\out5.txt
+
+// Table space limit
+ALTER DATABASE DATAFILE 'C:\ORACLEXE\APP\ORACLE\ORADATA\XE\SYSTEM.DBF'
+AUTOEXTEND ON NEXT 1M MAXSIZE 1024M;
+
+// No ver resultados de una consulta (Ya no se ve ningún resultado)
+set autotrace traceonly;
