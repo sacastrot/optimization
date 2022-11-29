@@ -9,7 +9,7 @@ WHERE addr = (SELECT paddr FROM sys.v_$session
               WHERE audsid = USERENV('sessionid')
              );
 // uso de tkprof
-tkprof C:\oraclexe\app\oracle\diag\rdbms\xe\xe\trace\xe_ora_3424.trc C:\temp\out5.txt
+tkprof C:\oraclexe\app\oracle\diag\rdbms\xe\xe\trace\xe_ora_23996.trc C:\temp\out1.txt
 
 // Table space limit
 ALTER DATABASE DATAFILE 'C:\ORACLEXE\APP\ORACLE\ORADATA\XE\SYSTEM.DBF'
@@ -17,3 +17,28 @@ AUTOEXTEND ON NEXT 1M MAXSIZE 1024M;
 
 // No ver resultados de una consulta (Ya no se ve ningún resultado)
 set autotrace traceonly;
+
+// explain plan con columnas diferentes
+EXPLAIN PLAN
+SET STATEMENT_ID = 'P1' FOR
+SELECT *
+FROM factura f, detalle d
+WHERE f.codigof = d.codfact;
+
+// Ver plan de ejecución
+SELECT LPAD(' ', 2*LEVEL) || OPERATION || ' '
+       || OPTIONS || ' ' || OBJECT_NAME || ' '
+       || OBJECT_TYPE ||  ' ' || OBJECT_INSTANCE || ' '
+       || OBJECT_OWNER || ' ' || OPTIMIZER || ' '
+       || POSITION || ' ' || ID || ' '
+       || PARENT_ID || ' '
+       AS query_plan
+FROM PLAN_TABLE
+WHERE STATEMENT_ID = 'P1'
+CONNECT BY PRIOR ID = PARENT_ID
+START WITH ID = 0;
+
+
+ALTER SYSTEM flush buffer_cache;
+ALTER SYSTEM flush shared_pool;
+

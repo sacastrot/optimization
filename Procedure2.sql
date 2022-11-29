@@ -1,4 +1,3 @@
--- TODO: Cambiar llenado ¿?
 create or replace procedure filldetalle(nRows IN number) is
     type number_type is table of number(20) index by binary_integer;
 
