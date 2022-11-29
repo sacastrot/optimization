@@ -1,4 +1,4 @@
--- TODO: Tiene errores la logica, no funciona
+-- TODO: Cambiar llenado ¿?
 create or replace procedure filldetalle(nRows IN number) is
     type number_type is table of number(20) index by binary_integer;
 
@@ -23,7 +23,6 @@ begin
             codFact(li) := codFromFact(i);
             li := li + 1;
         end loop;
-
     end loop;
     forall k in 0..(li-1)
         insert into DETALLE values (codD(k),codProd(k),nroUnits(k),uniValue(k),codFact(k));
