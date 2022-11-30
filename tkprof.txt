@@ -9,7 +9,7 @@ WHERE addr = (SELECT paddr FROM sys.v_$session
               WHERE audsid = USERENV('sessionid')
              );
 // uso de tkprof
-tkprof C:\oraclexe\app\oracle\diag\rdbms\xe\xe\trace\xe_ora_23996.trc C:\temp\out1.txt
+tkprof C:\oraclexe\app\oracle\diag\rdbms\xe\xe\trace\xe_ora_11388.trc C:\temp\out5M.txt
 
 // Table space limit
 ALTER DATABASE DATAFILE 'C:\ORACLEXE\APP\ORACLE\ORADATA\XE\SYSTEM.DBF'
@@ -42,3 +42,68 @@ START WITH ID = 0;
 ALTER SYSTEM flush buffer_cache;
 ALTER SYSTEM flush shared_pool;
 
+// Truncate of tables
+
+set lines 2999
+COL CHILD_TABLE FOR A20
+col CONSTRAINT_NAME for a26
+col owner form a10
+col FK_column form a15
+col table_name form a30
+select b.owner, b.table_name child_table,
+c.column_name FK_column, b.constraint_name
+from dba_constraints a, dba_constraints b, dba_cons_columns c
+where a.owner=b.r_owner
+and b.owner=c.owner
+and b.table_name=c.table_name
+and b.constraint_name=c.constraint_name
+and a.constraint_name=b.r_constraint_name
+and b.constraint_type='R'
+and a.owner='&owner'
+and a.table_name='&TABLE_NAME'
+and a.CONSTRAINT_TYPE='P';
+
+// Saber owner
+
+select owner
+     , object_name
+     , object_type
+  from ALL_OBJECTS
+ where object_name = 'FOO'
+
+'''
+Ejemplo
+OWNER CHILD_TABLE FK_COLUMN CONSTRAINT_NAME
+---------- -------------------- --------------- --------------------------
+DBACLASS AAF_USER_MEMBER MEMBER AAF_USER_FK1
+'''
+
+
+// desactivar clave foranea
+
+alter table dbaclass.AAF_USER_MEMBER disable constraint AAF_USER_FK1;
+
+// Problema de udp tablespace
+
+select
+  2     file_name,
+  3     bytes,
+  4     autoextensible
+  5  from
+  6     dba_data_files;
+
+ALTER DATABASE DATAFILE '/vg01lv11/oracle//data/undotbs_d1_O2P00R11.dbf' AUTOEXTEND ON MAXSIZE 10g;
+
+ALTER DATABASE DATAFILE '/vg01lv11/oracle//data/undotbs_d1_O2P00R11.dbf'
+       RESIZE 1000M;
+
+alter tablespace
+   undotbs1
+add datafile
+   'C:\APP\ORCL\ORADATA\ORCL\UNDOTBS01A.DBF'
+size 500m
+autoextend on;
+
+// Documentación explain plan
+
+https://docs.oracle.com/cd/B10501_01/server.920/a96533/sqltrace.htm#:~:text=The%20SQL%20Trace%20facility%20provides,CPU%20and%20elapsed%20times
