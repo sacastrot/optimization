@@ -16,3 +16,15 @@ create table prodxtipo(
     codprod number(20) not null,
     tipo varchar(2) not null
 );
+
+drop table prodxtipo;
+drop table detalle;
+drop table factura;
+
+insert into factura values(10, TO_DATE('2000/10/03', 'YYYY/MM/DD'));
+
+insert into detalle values(1,1,35,35,10);
+
+SELECT *
+FROM factura f, detalle d
+WHERE f.codigof = d.codfact;
